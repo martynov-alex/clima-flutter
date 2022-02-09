@@ -2,18 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
 
 class LocationScreen extends StatefulWidget {
+  LocationScreen({this.locationWeather});
+
+  final locationWeather;
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  int condition = 0;
+  int temperature = 0;
+  String cityName = '';
+  String countryName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    updateUI(widget.locationWeather);
+    print(widget.locationWeather);
+  }
+
+  void updateUI(dynamic weatherData) {
+    condition = weatherData['weather'][0]['id'];
+    temperature = weatherData['main']['temp'].round();
+    cityName = weatherData['name'];
+    countryName = weatherData['sys']['country'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/location_background.jpg'),
+            image: const AssetImage('images/location_background.jpg'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
                 Colors.white.withOpacity(0.8), BlendMode.dstATop),
@@ -28,19 +51,15 @@ class _LocationScreenState extends State<LocationScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  FlatButton(
+                  IconButton(
                     onPressed: () {},
-                    child: Icon(
-                      Icons.near_me,
-                      size: 50.0,
-                    ),
+                    icon: const Icon(Icons.near_me),
+                    iconSize: 50,
                   ),
-                  FlatButton(
+                  IconButton(
                     onPressed: () {},
-                    child: Icon(
-                      Icons.location_city,
-                      size: 50.0,
-                    ),
+                    icon: const Icon(Icons.location_city),
+                    iconSize: 50,
                   ),
                 ],
               ),
@@ -48,14 +67,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 padding: EdgeInsets.only(left: 15.0),
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      '32°',
-                      style: kTempTextStyle,
-                    ),
-                    Text(
-                      '☀️',
-                      style: kConditionTextStyle,
-                    ),
+                    Text('$temperature°', style: kTempTextStyle),
+                    Text('☀', style: kConditionTextStyle),
                   ],
                 ),
               ),
