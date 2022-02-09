@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:clima/services/location.dart';
 import 'package:clima/services/networking.dart';
+import 'package:clima/services/get_country_name.dart';
 import 'package:clima/screens/location_screen.dart';
 
 const apiKey = '4d97e3c9526feb93f8d3a07212dafe1e';
@@ -26,8 +27,17 @@ class _LoadingScreenState extends State<LoadingScreen> {
     NetworkHelper networkHelper = NetworkHelper(
         'http://api.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&units=metric&appid=$apiKey');
     var weatherData = await networkHelper.getData();
+
+    CountryProviderService countryProviderService = CountryProviderService();
+    var country = await countryProviderService.getCountryName(
+        countryCode: weatherData['sys']['country']);
+    String countryName = country.name;
+
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LocationScreen(locationWeather: weatherData);
+      return LocationScreen(
+        locationWeather: weatherData,
+        country: countryName,
+      );
     }));
   }
 
