@@ -7,13 +7,15 @@ class CityScreen extends StatefulWidget {
 }
 
 class _CityScreenState extends State<CityScreen> {
+  String cityName = '';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
-            image: const AssetImage('images/city_background.jpg'),
+            image: AssetImage('images/city_background.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -23,23 +25,40 @@ class _CityScreenState extends State<CityScreen> {
             children: <Widget>[
               Align(
                 alignment: Alignment.topLeft,
-                child: FlatButton(
-                  onPressed: () {},
-                  child: const Icon(
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
                     Icons.arrow_back_ios,
                     size: 50.0,
                   ),
+                  constraints: BoxConstraints(minWidth: 70, minHeight: 70),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(20.0),
-                child: null,
+                padding: const EdgeInsets.all(15.0),
+                child: TextField(
+                  style: kTextFillTextStyle,
+                  decoration: kTextFillInputDecoration,
+                  onChanged: (value) {
+                    cityName = value;
+                  },
+                ),
               ),
-              FlatButton(
-                onPressed: () {},
-                child: const Text(
-                  'Get Weather',
-                  style: kButtonTextStyle,
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.pop(context, cityName);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(3.0),
+                  child: Text(
+                    'Get Weather',
+                    style: kButtonTextStyle,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(width: 2, color: Colors.white),
                 ),
               ),
             ],
